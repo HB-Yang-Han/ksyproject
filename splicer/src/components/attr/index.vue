@@ -94,6 +94,7 @@ export default {
   }
   .title {
     padding-top: 6px;
+    padding-bottom: 6px;
     /deep/ .el-input-group__prepend {
       padding: 0px 6px;
     }

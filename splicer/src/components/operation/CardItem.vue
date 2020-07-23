@@ -51,7 +51,8 @@ export default {
 }
 .card-item-bg {
   background-color: #f5f7fa;
-  span {
+  span,
+  i {
     color: #409eff;
   }
 }

@@ -18,7 +18,7 @@
           <div class="card-s">
             <card title="设置">
               <card-item title="创建画面" iconName="el-icon-circle-plus"></card-item>
-              <card-item title="屏幕配置" iconName="el-icon-s-operation" @click.native="setting('1')"></card-item>
+              <card-item title="屏幕配置" iconName="el-icon-s-operation" @click.native="setting('2')"></card-item>
             </card>
             <card title="预设">
               <card-item title="用户模式" iconName="el-icon-user-solid"></card-item>
@@ -61,7 +61,12 @@
               </div>
             </card>
             <card title="锁定">
-              <card-item title="位置锁定" iconName="el-icon-lock"></card-item>
+              <card-item
+                title="位置锁定"
+                iconName="el-icon-lock"
+                :isChecked="positionLock===true"
+                @click.native="positionLock=!positionLock"
+              ></card-item>
             </card>
           </div>
         </el-tab-pane>
@@ -98,56 +103,24 @@
     </header>
     <center>
       <!-- 侧边栏选项 -->
-      <div class="content-nav">
-        <div class="content-title">{{activeList[parseInt(activeName)]}}</div>
-        <el-collapse v-model="activeName" accordion>
-          <el-collapse-item name="0">
-            <template slot="title">
-              <i class="header-icon el-icon-s-tools"></i>
-              <span class="content-list-title">信号管理</span>
-            </template>
-            <div class="content-list">信号管理</div>
-          </el-collapse-item>
-          <el-collapse-item name="1">
-            <template slot="title">
-              <i class="header-icon el-icon-user-solid"></i>
-              <span class="content-list-title">用户模式</span>
-            </template>
-            <div class="content-list">用户模式</div>
-          </el-collapse-item>
-          <el-collapse-item name="2">
-            <template slot="title">
-              <i class="header-icon el-icon-video-camera-solid"></i>
-              <span class="content-list-title">场景轮巡</span>
-            </template>
-            <div class="content-list">场景轮巡</div>
-          </el-collapse-item>
-          <el-collapse-item name="3">
-            <template slot="title">
-              <i class="header-icon el-icon-s-grid"></i>
-              <span class="content-list-title">信号源分组</span>
-            </template>
-            <div class="content-list">信号源分组</div>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
+      <signal></signal>
       <!-- 屏幕编辑与显示 -->
       <div class="content">
         <div class="content-title">模拟操作</div>
         <div class="content-draw">
           <!-- 窗口编辑面板 -->
           <div class="draw-panel">
-            <div class="draw-content">
+            <div class="draw-content" :class="{'draw-center':(drawCenter&&!isEcho)}">
               <!-- 屏幕墙网格 -->
-              <div class="grids">
-                <!-- 屏幕分割线 -->
-                <div v-for="(item,index) in 4" :key="index" class="gridlines">
-                  <span>{{index+1}}</span>
-                  <!-- 屏幕内部分割线 -->
-                  <div v-for="(item,index) in 4" :key="index"></div>
-                </div>
-              </div>
-              <vdr></vdr>
+              <!-- <div class="grids"> -->
+              <!-- 屏幕分割线 -->
+              <!-- <div v-for="(item,index) in 4" :key="index" class="gridlines"> -->
+              <!-- <span>{{index+1}}</span> -->
+              <!-- 屏幕内部分割线 -->
+              <!-- <div v-for="(item,index) in 4" :key="index"></div> -->
+              <!-- </div> -->
+              <!-- </div> -->
+              <vdr @alignCenter="alignCenter"></vdr>
             </div>
           </div>
           <!-- 回显 -->
@@ -155,7 +128,7 @@
         </div>
       </div>
       <div class="content-compile" v-show="true">
-        <div class="content-title">屏幕编辑</div>
+        <div class="content-title">画面编辑</div>
         <div class="content-attr">
           <attr></attr>
         </div>
@@ -173,6 +146,7 @@
         <div title="A123411">A123411</div>
       </div>
     </footer>
+    <!-- 弹窗集合组件 -->
     <udialog :title="dialogTitle" :dialogVisible="dialogVisible" @isDialogVisible="isDialogVisible"></udialog>
   </div>
 </template>
@@ -183,6 +157,7 @@ import card from "@/components/operation/Card";
 import cardItem from "@/components/operation/CardItem";
 import cardChild from "@/components/operation/CardChild";
 import udialog from "@/components/dialog";
+import signal from "@/components/signal";
 import vdr from "@/components/vdr";
 import attr from "@/components/attr";
 
@@ -194,7 +169,9 @@ export default {
       activeList: ["信号管理", "用户模式", "场景轮巡", "信号源分组"], // 侧边栏选项列表
       isEcho: false, // 是否回传
       dialogVisible: false, // 弹出对话框
-      dialogTitle: ""
+      dialogTitle: "",
+      drawCenter: true,
+      positionLock: false //位置锁定
     };
   },
   methods: {
@@ -212,15 +189,18 @@ export default {
     setting(setFn) {
       console.log(setFn);
       if (setFn === "1") {
+        console.log("创建画面");
+      }
+      if (setFn === "2") {
         this.dialogTitle = "ConfigureScreen";
         this.dialogVisible = true;
       }
-      if (setFn === "2") {
-        this.isEcho = false;
-      }
-    },
+    }, // 屏幕配置回调函数
     isDialogVisible(bool) {
       this.dialogVisible = bool;
+    }, // 屏幕编辑面板超出范围取消居中回调函数
+    alignCenter(bool) {
+      this.drawCenter = bool;
     }
   },
   components: {
@@ -229,7 +209,8 @@ export default {
     cardChild,
     udialog,
     vdr,
-    attr
+    attr,
+    signal
   }
 };
 </script>
@@ -271,101 +252,92 @@ export default {
       color: #909399;
       font-size: 14px;
     }
-    .content-nav {
-      border-right: 1px solid #dcdfe6;
-      padding-left: 10px;
-      flex: 0 0 200px;
-      .header-icon {
-        padding-right: 6px;
-        // padding-bottom: 1px;
-        // padding-top: 2px;
-        font-size: 16px;
-      }
-      .el-collapse {
-        border-top: none;
-      }
-      .content-list {
-        border-top: 1px solid #ebeef5;
-      }
-      .content-list-title:hover {
-        color: #409eff;
-      }
-      /deep/ .el-collapse-item__header {
-        height: 40px;
-        line-height: 40px;
-      }
-    }
+    // .content-nav {
+    //   border-right: 1px solid #dcdfe6;
+    //   padding-left: 10px;
+    //   flex: 0 0 200px;
+    //   .header-icon {
+    //     padding-right: 6px;
+    //     // padding-bottom: 1px;
+    //     // padding-top: 2px;
+    //     font-size: 16px;
+    //   }
+    //   .el-collapse {
+    //     border-top: none;
+    //   }
+    //   .content-list {
+    //     border-top: 1px solid #ebeef5;
+    //   }
+    //   .content-list-title:hover {
+    //     color: #409eff;
+    //   }
+    //   /deep/ .el-collapse-item__header {
+    //     height: 40px;
+    //     line-height: 40px;
+    //   }
+    // }
     .content {
       flex: 1;
       .content-draw {
         height: calc(100% - 30px);
         display: flex;
         flex-direction: column;
-        // padding: 8px;
-        // /* 滚动条的宽度(包括横向纵向) */
-        // ::-webkit-scrollbar {
-        //   width: 4px;
-        //   height: 4px;
-        // }
-        // /* 滚动条的滑块 */
-        // ::-webkit-scrollbar-thumb {
-        //   background-color: #e6e8eb;
-        //   border-radius: 4px;
-        // }
         .draw-panel {
           flex: 1;
           min-height: 418px;
           position: relative;
           overflow: scroll;
-          .draw-content {
-            .grids {
-              position: absolute;
-              top: 1px;
-              left: 1px;
-              width: 768px;
-              height: 432px;
-              display: flex;
-              flex-wrap: wrap;
-              .gridlines {
-                position: relative;
-                display: flex;
-                flex-wrap: wrap;
-                box-sizing: border-box;
-                width: 384px;
-                height: 216px;
-                border: 1px solid #dcdfe6;
-                span {
-                  position: absolute;
-                  color: #909399;
-                }
-                div {
-                  width: 191px;
-                  height: 108px;
-                  box-sizing: border-box;
-                  // border: 1px dashed #dcdfe6;
-                  border-right: 1px dashed #dcdfe6;
-                  border-bottom: 1px dashed #dcdfe6;
-                }
-                div:nth-child(2n + 1) {
-                  border-right: none;
-                }
-                div:nth-child(4) {
-                  border-bottom: none;
-                }
-                div:nth-child(5) {
-                  border-bottom: none;
-                }
-              }
-            }
-            background-color: #f5f7fa;
-            border: 1px solid #dcdfe6;
-            border-radius: 6px;
-            // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12),
-            //   0 0 6px 0 rgba(0, 0, 0, 0.04);
-            position: absolute;
+          .draw-center {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+          }
+          .draw-content {
+            background-color: #f5f7fa;
+            border: 1px solid #dcdfe6;
+            position: absolute;
+            // top: 50%;
+            // left: 50%;
+            // transform: translate(-50%, -50%);
+            // .grids {
+            //   position: absolute;
+            //   top: 1px;
+            //   left: 1px;
+            //   width: 768px;
+            //   height: 432px;
+            //   display: flex;
+            //   flex-wrap: wrap;
+            //   .gridlines {
+            //     position: relative;
+            //     display: flex;
+            //     flex-wrap: wrap;
+            //     box-sizing: border-box;
+            //     width: 384px;
+            //     height: 216px;
+            //     border: 1px solid #dcdfe6;
+            //     span {
+            //       position: absolute;
+            //       color: #909399;
+            //     }
+            //     div {
+            //       width: 191px;
+            //       height: 108px;
+            //       box-sizing: border-box;
+            //       // border: 1px dashed #dcdfe6;
+            //       border-right: 1px dashed #dcdfe6;
+            //       border-bottom: 1px dashed #dcdfe6;
+            //     }
+            //     div:nth-child(2n + 1) {
+            //       border-right: none;
+            //     }
+            //     div:nth-child(4) {
+            //       border-bottom: none;
+            //     }
+            //     div:nth-child(5) {
+            //       border-bottom: none;
+            //     }
+            //   }
+            // }
           }
         }
         .display-list {
@@ -377,7 +349,6 @@ export default {
     .content-compile {
       flex: 0 0 210px;
       border-left: 1px solid #dcdfe6;
-      // padding-left: 10px;
     }
   }
   footer {

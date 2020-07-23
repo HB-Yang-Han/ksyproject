@@ -24,13 +24,27 @@
             <cs-parameter :data="data"></cs-parameter>
             <!-- 屏幕列表辑面板 -->
             <div class="drawing">
-              <div class="resolution-x" :style="`width: ${row*192}px;`">
-                <div v-for="(item,index) in row" :key="index">1920</div>
+              <div class="resolution-x" :style="`width: ${column*192}px;`">
+                <div v-for="(item,index) in column" :key="index">
+                  <el-input
+                    v-model="ranksRow[index]"
+                    placeholder="请输入内容"
+                    size="mini"
+                    @input="ranks('column',index,ranksRow[index])"
+                  ></el-input>
+                </div>
               </div>
-              <div class="resolution-y" :style="`height: ${column*108}px;`">
-                <div v-for="(item,index) in column" :key="index">1080</div>
+              <div class="resolution-y" :style="`height: ${row*108}px;`">
+                <div v-for="(item,index) in row" :key="index">
+                  <el-input
+                    v-model="ranksColumn[index]"
+                    placeholder="请输入内容"
+                    size="mini"
+                    @input="ranks('row',index,ranksColumn[index])"
+                  ></el-input>
+                </div>
               </div>
-              <div class="drawing-list" :style="`width: ${row*192}px; height: ${column*108}px;`">
+              <div class="drawing-list" :style="`width: ${column*192}px; height: ${row*108}px;`">
                 <div
                   v-for="(item,index) in displayList"
                   :key="index"
@@ -45,16 +59,10 @@
                     <p>输出映射:{{item.settingPort}}</p>
                   </div>
                   <div div v-show="displayIndex === index">
-                    <p>
-                      屏幕编号:
-                      <el-input
-                        v-model="item.title"
-                        placeholder="请输入内容"
-                        size="mini"
-                        style="width: 100px;"
-                      ></el-input>
-                    </p>
-                    <p>
+                    <p>屏幕编号:{{item.title}}</p>
+                    <p>水平大小:{{item.resolutionX}}</p>
+                    <p>垂直大小:{{item.resolutionY}}</p>
+                    <!-- <p>
                       水平大小:
                       <el-input
                         v-model="item.resolutionX"
@@ -71,8 +79,8 @@
                         size="mini"
                         style="width:100px"
                       ></el-input>
-                    </p>
-                    <p>输出映射:Port{{item.settingPort}}(点击左侧端口修改)</p>
+                    </p>-->
+                    <p>输出映射:Port{{item.settingPort}}(点击Port修改)</p>
                   </div>
                 </div>
               </div>
@@ -159,15 +167,19 @@ export default {
       isVisible: this.dialogVisible, // 窗口是否显示
       portList: [], // 端口port列表
       displayLists: [], // 屏幕墙列表
-      row: 2, // 屏幕列表行
-      column: 4,
+      row: 2,
+      column: 4, // 屏幕列表行
       resolution: "1920*1080",
       displayList, // 屏幕数据列表
-      displayIndex: undefined // 当前选中屏幕
+      displayIndex: undefined, // 当前选中屏幕
+      ranksRow: [], // 行顶部分辨率列表
+      ranksColumn: [] // 列左部分辨率列表
     };
   },
   created() {
-    this.portList = Array.from({ length: 90 }, (v, k) => k + 1);
+    this.portList = Array.from({ length: 90 }, (v, k) => 90 - k);
+    this.ranksRow = Array.from({ length: this.column }, () => 1920);
+    this.ranksColumn = Array.from({ length: this.row }, () => 1080);
   },
   methods: {
     isSubmit(bool) {
@@ -176,14 +188,42 @@ export default {
       } else {
         console.log("取消");
       }
-      this.$emit("isDialogVisible", false);
+      this.$emit("isDialogVisible", false); // 退出关闭弹窗
     },
     portPut(io) {
-      console.log(io);
+      // 当前点击的port端口
+      // console.log(io);
+      if (this.displayIndex != undefined) {
+        displayList[this.displayIndex].settingPort = io;
+      } else {
+        console.log("请选择屏幕！");
+      }
     },
     displaySelect(index) {
-      console.log(index);
+      // 当前选中的屏幕
+      // console.log(index);
       this.displayIndex = index;
+    },
+    ranks(rc, count, val) {
+      //修改行与列的分辨率
+      console.log(rc, count);
+      if (rc === "column") {
+        // 列分辨率设置
+        this.displayList.forEach((ele, index) => {
+          // console.log(index,ele);
+          if (index % this.column === 0) {
+            displayList[index + count].resolutionX = val;
+            // console.log(index, ele);
+          }
+        });
+      }
+      if (rc === "row") {
+        // 行分辨率设置
+        let start = count * this.column;
+        for (let i = start; i < start + this.column; i++) {
+          displayList[i].resolutionY = val;
+        }
+      }
     }
   },
   components: {
@@ -204,6 +244,7 @@ export default {
       width: 300px;
       display: flex;
       flex-wrap: wrap;
+      flex-direction: row-reverse;
       border-left: 1px solid #dcdfe6;
       border-top: 1px solid #dcdfe6;
       li {
@@ -249,12 +290,17 @@ export default {
         top: 0px;
         background: #e4e7ed;
         div {
-          border: 1px solid #dcdfe6;
+          // border: 1px solid #dcdfe6;
           box-sizing: border-box;
           width: 192px;
           height: 20px;
-          text-align: center;
-          line-height: 20px;
+          /deep/ .el-input--mini .el-input__inner {
+            height: 100%;
+            line-height: 20px;
+            border-radius: 0px;
+            text-align: center;
+            background: #e4e7ed;
+          }
         }
       }
       .resolution-y {
@@ -265,12 +311,18 @@ export default {
         left: 0px;
         background: #e4e7ed;
         div {
-          border: 1px solid #dcdfe6;
+          // border: 1px solid #dcdfe6;
           box-sizing: border-box;
           width: 40px;
           height: 108px;
-          text-align: center;
-          line-height: 108px;
+          /deep/ .el-input--mini .el-input__inner {
+            height: 100%;
+            line-height: 20px;
+            border-radius: 0px;
+            text-align: center;
+            padding: 0px;
+            background: #e4e7ed;
+          }
         }
       }
       // display: flex;

@@ -1,15 +1,20 @@
 <template>
   <div class="vdr-child">
     <div class="title">
-      <span @click="windowEdit('0')">
-        <i class="el-icon-remove" style="color: #91dd9d"></i>
-      </span>
-      <span @click="windowEdit('1')">
-        <i class="el-icon-circle-plus" style="color: #ffcd8a"></i>
-      </span>
-      <span @click="windowEdit('2')">
-        <i class="el-icon-error" style="color: #ff8739"></i>
-      </span>
+      <div class="title-win">
+        <span>Win-1:S1_1</span>
+      </div>
+      <div class="title-control">
+        <span @click="windowEdit('0')">
+          <i class="el-icon-remove" style="color: #91dd9d"></i>
+        </span>
+        <span @click="windowEdit('1')">
+          <i class="el-icon-circle-plus" style="color: #ffcd8a"></i>
+        </span>
+        <span @click="windowEdit('2')">
+          <i class="el-icon-error" style="color: #ff8739"></i>
+        </span>
+      </div>
     </div>
     <div class="content">
       <slot></slot>
@@ -20,7 +25,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      
+    };
   },
   methods: {
     windowEdit(val) {
@@ -48,22 +55,37 @@ export default {
   // padding-left: 0px;
   .title {
     flex: 0 0 28px;
-    border-radius: 8px 8px 0 0;
-    background: #409eff;
+    // border-radius: 8px 8px 0 0;
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-right: 4px;
-    span {
-      padding: 2px;
+    display: flex;
+    justify-content: space-between;
+    background: #409eff;
+    .title-win {
+      padding: 0px 6px;
+      overflow: hidden;
+      span {
+        font-size: 12px;
+        line-height: 28px;
+        white-space: nowrap;
+      }
     }
-    span:hover {
-      font-size: 20px;
+    .title-control {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 6px;
+      overflow: hidden;
+      span {
+        padding: 2px;
+      }
+      span:hover {
+        font-size: 20px;
+      }
     }
   }
   .content {
     flex: 1;
-    border-radius: 0 0 8px 8px;
+    // border-radius: 0 0 8px 8px;
     background: #e4e7ed;
     overflow: hidden;
     padding: 6px;
