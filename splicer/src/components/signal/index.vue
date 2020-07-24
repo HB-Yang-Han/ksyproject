@@ -4,28 +4,28 @@
     <el-collapse v-model="activeName" accordion>
       <el-collapse-item name="0">
         <template slot="title">
-          <i class="header-icon el-icon-s-tools"></i>
+          <img class="header-icon" src="@/assets/images/SignalManagement.png" />
           <span class="content-list-title">信号管理</span>
         </template>
         <div class="content-list">信号管理</div>
       </el-collapse-item>
       <el-collapse-item name="1">
         <template slot="title">
-          <i class="header-icon el-icon-user-solid"></i>
+          <img class="header-icon" src="@/assets/images/UserMode.png" />
           <span class="content-list-title">用户模式</span>
         </template>
         <div class="content-list">用户模式</div>
       </el-collapse-item>
       <el-collapse-item name="2">
         <template slot="title">
-          <i class="header-icon el-icon-video-camera-solid"></i>
+          <img class="header-icon" src="@/assets/images/Round.png" />
           <span class="content-list-title">场景轮巡</span>
         </template>
         <div class="content-list">场景轮巡</div>
       </el-collapse-item>
       <el-collapse-item name="3">
         <template slot="title">
-          <i class="header-icon el-icon-s-grid"></i>
+          <img class="header-icon" src="@/assets/images/signal.png" />
           <span class="content-list-title">信号源分组</span>
         </template>
         <div class="content-list">信号源分组</div>
@@ -39,9 +39,9 @@ export default {
   data() {
     return {
       activeName: "0", // 侧边栏选项
-      activeList: ["信号管理", "用户模式", "场景轮巡", "信号源分组"] // 侧边栏选项列表
+      activeList: ["信号管理", "用户模式", "场景轮巡", "信号源分组"], // 侧边栏选项列表
     };
-  }
+  },
 };
 </script>
 
@@ -61,7 +61,9 @@ export default {
     padding-right: 6px;
     // padding-bottom: 1px;
     // padding-top: 2px;
-    font-size: 16px;
+    // font-size: 16px;
+    width: 16px;
+    height: 16px;
   }
   .el-collapse {
     border-top: none;

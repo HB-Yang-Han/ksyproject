@@ -1,7 +1,7 @@
 <template>
   <div class="card-item" :class="{'card-item-bg':isChecked}">
     <div>
-      <i class="header-icon" :class="iconName"></i>
+      <img :src="iconImg" class="header-icon" />
     </div>
     <div>
       <span>{{title}}</span>
@@ -14,16 +14,24 @@ export default {
   props: {
     title: {
       type: String,
-      default: "未定义"
+      default: "未定义",
     },
     iconName: {
       type: String,
-      default: "el-icon-eleme"
+      default: "eleme",
     },
     isChecked: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+  },
+  data() {
+    return {
+      iconImg: "",
+    };
+  },
+  created() {
+    this.iconImg = require(`@/assets/images/${this.iconName}.png`);
   }
 };
 </script>
@@ -40,7 +48,9 @@ export default {
   margin: 0px 1px;
   border-radius: 6px;
   .header-icon {
-    font-size: 34px;
+    // font-size: 34px;
+    width: 34px;
+    height: 34px;
   }
   div {
     text-align: center;

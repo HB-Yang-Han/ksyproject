@@ -9,7 +9,7 @@
               <card-item title="设备选择"></card-item>
               <card-item title="连接设备"></card-item>
               <card-item title="断开设备"></card-item>
-              <card-item title="同步" iconName="el-icon-upload"></card-item>
+              <card-item title="同步"></card-item>
               <card-item title="退出"></card-item>
             </card>
           </div>
@@ -17,53 +17,42 @@
         <el-tab-pane label="主功能区">
           <div class="card-s">
             <card title="设置">
-              <card-item title="创建画面" iconName="el-icon-circle-plus"></card-item>
-              <card-item title="屏幕配置" iconName="el-icon-s-operation" @click.native="setting('2')"></card-item>
+              <card-item title="创建画面" iconName="plus"></card-item>
+              <card-item title="屏幕配置" iconName="display" @click.native="setting('2')"></card-item>
             </card>
             <card title="预设">
-              <card-item title="用户模式" iconName="el-icon-user-solid"></card-item>
-              <card-item title="保存模式" iconName="el-icon-folder-checked"></card-item>
-              <card-item title="出厂设置" iconName="el-icon-s-operation"></card-item>
-              <card-item title="同步" iconName="el-icon-upload"></card-item>
-              <card-item
-                title="打开回显"
-                iconName="el-icon-s-claim"
-                :isChecked="isEcho===true"
-                @click.native="preinstall('5')"
-              ></card-item>
-              <card-item
-                title="关闭回显"
-                iconName="el-icon-s-release"
-                :isChecked="isEcho===false"
-                @click.native="preinstall('6')"
-              ></card-item>
-              <card-item title="回显配置" iconName="el-icon-s-order"></card-item>
+              <card-item title="用户模式"></card-item>
+              <card-item title="保存模式"></card-item>
+              <card-item title="出厂设置"></card-item>
+              <card-item title="同步"></card-item>
+              <card-item title="打开回显" :isChecked="isEcho===true" @click.native="preinstall('5')"></card-item>
+              <card-item title="关闭回显" :isChecked="isEcho===false" @click.native="preinstall('6')"></card-item>
+              <card-item title="回显配置"></card-item>
             </card>
             <card title="屏幕切换">
-              <card-item title="屏幕墙 1" iconName="el-icon-s-platform"></card-item>
-              <card-item title="屏幕墙 2" iconName="el-icon-s-platform"></card-item>
+              <card-item title="屏幕墙 1" iconName="display"></card-item>
+              <card-item title="屏幕墙 2" iconName="display"></card-item>
               <div class="card-item">
-                <card-child title="屏幕墙3" iconName="el-icon-s-platform"></card-child>
-                <card-child title="屏幕墙4" iconName="el-icon-s-platform"></card-child>
-                <card-child title="屏幕墙5" iconName="el-icon-s-platform"></card-child>
+                <card-child title="屏幕墙3" iconName="display"></card-child>
+                <card-child title="屏幕墙4" iconName="display"></card-child>
+                <card-child title="屏幕墙5" iconName="display"></card-child>
               </div>
               <div class="card-item">
-                <card-child title="屏幕墙6" iconName="el-icon-s-platform"></card-child>
-                <card-child title="屏幕墙7" iconName="el-icon-s-platform"></card-child>
-                <card-child title="屏幕墙8" iconName="el-icon-s-platform"></card-child>
+                <card-child title="屏幕墙6" iconName="display"></card-child>
+                <card-child title="屏幕墙7" iconName="display"></card-child>
+                <card-child title="屏幕墙8" iconName="display"></card-child>
               </div>
             </card>
             <card title="对外控制">
               <div class="card-item">
-                <card-child title="开屏" iconName="el-icon-s-platform"></card-child>
-                <card-child title="关屏" iconName="el-icon-s-platform"></card-child>
-                <card-child title="通道设置" iconName="el-icon-s-platform"></card-child>
+                <card-child title="开屏" iconName="display"></card-child>
+                <card-child title="关屏" iconName="display"></card-child>
+                <card-child title="通道设置" iconName="display"></card-child>
               </div>
             </card>
             <card title="锁定">
               <card-item
                 title="位置锁定"
-                iconName="el-icon-lock"
                 :isChecked="positionLock===true"
                 @click.native="positionLock=!positionLock"
               ></card-item>
@@ -139,8 +128,8 @@
       <div class="status-bar">
         <div>通讯状态:</div>
         <div>
-          <i v-show="true" class="el-icon-success" style="color: green;"></i>
-          <i v-show="false" class="el-icon-error" style="color: red;"></i>
+          <img v-show="false" class="header-icon" src="@/assets/images/succeed.png" />
+          <img v-show="true" class="header-icon" src="@/assets/images/failed.png" />
         </div>
         <div>设备型号:</div>
         <div title="A123411">A123411</div>
@@ -171,7 +160,7 @@ export default {
       dialogVisible: false, // 弹出对话框
       dialogTitle: "",
       drawCenter: true,
-      positionLock: false //位置锁定
+      positionLock: false, //位置锁定
     };
   },
   methods: {
@@ -201,7 +190,7 @@ export default {
     }, // 屏幕编辑面板超出范围取消居中回调函数
     alignCenter(bool) {
       this.drawCenter = bool;
-    }
+    },
   },
   components: {
     card,
@@ -210,8 +199,8 @@ export default {
     udialog,
     vdr,
     attr,
-    signal
-  }
+    signal,
+  },
 };
 </script>
 
@@ -372,6 +361,12 @@ export default {
         width: 20px;
         line-height: 30px;
         padding: 0px 2px;
+        display: flex;
+        align-items: center;
+        .header-icon {
+          width: 18px;
+          height: 18px;
+        }
       }
       div:nth-child(4) {
         width: 60px;

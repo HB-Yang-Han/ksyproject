@@ -1,6 +1,6 @@
 <template>
   <div class="card-child">
-    <i :class="iconName"></i>
+    <img :src="iconImg" class="header-icon" />
     <span>{{title}}</span>
   </div>
 </template>
@@ -14,8 +14,16 @@ export default {
     },
     iconName: {
       type: String,
-      default: "el-icon-eleme"
+      default: "eleme"
     }
+  },
+  data() {
+    return {
+      iconImg: "",
+    };
+  },
+  created() {
+    this.iconImg = require(`@/assets/images/${this.iconName}.png`);
   }
 };
 </script>
@@ -25,7 +33,14 @@ export default {
   width: 60px;
   font-size: 12px;
   padding: 0px 4px;
+  display: flex;
+  align-items: center;
+  .header-icon{
+    width: 12px;
+    height: 12px;
+  }
   span {
+    // padding-left: 2px;
     color: #909399;
   }
   span:hover {

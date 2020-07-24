@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>-->
-    <home />
+    <home></home>
   </div>
 </template>
 
@@ -14,8 +14,8 @@ import home from "@/views/Home";
 export default {
   name: "app",
   components: {
-    home
-  }
+    home,
+  },
 };
 </script>
 
