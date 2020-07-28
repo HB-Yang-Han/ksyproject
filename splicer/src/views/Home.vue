@@ -149,7 +149,6 @@ import udialog from "@/components/dialog";
 import signal from "@/components/signal";
 import vdr from "@/components/vdr";
 import attr from "@/components/attr";
-
 export default {
   name: "Home",
   data() {
@@ -162,6 +161,19 @@ export default {
       drawCenter: true,
       positionLock: false, //位置锁定
     };
+  },
+  created() {
+    this.$http
+      .post("/user", {
+        userName: "Fred",
+        password: "Flintstone",
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   },
   methods: {
     // 预设:1-用户模式、2-保存模式、3-出厂设置、4-同步、5-打开回显、6-关闭回显、7-回显设置

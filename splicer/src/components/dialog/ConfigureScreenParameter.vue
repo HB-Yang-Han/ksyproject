@@ -34,7 +34,6 @@
         <span>行数:</span>
         <el-input-number
           v-model="rowNum"
-          controls-position="right"
           :min="1"
           :max="10"
           size="mini"
@@ -45,7 +44,6 @@
         <span>列数:</span>
         <el-input-number
           v-model="columnNum"
-          controls-position="right"
           :min="1"
           :max="10"
           size="mini"

@@ -6,13 +6,13 @@
       </div>
       <div class="title-control">
         <span @click="windowEdit('0')">
-          <i class="el-icon-remove" style="color: #91dd9d"></i>
+          <i class="el-icon-minus" style="color: #91dd9d"></i>
         </span>
         <span @click="windowEdit('1')">
-          <i class="el-icon-circle-plus" style="color: #ffcd8a"></i>
+          <i class="el-icon-plus" style="color: #ffcd8a"></i>
         </span>
         <span @click="windowEdit('2')">
-          <i class="el-icon-error" style="color: #ff8739"></i>
+          <i class="el-icon-ride" style="color: #ff8739"></i>
         </span>
       </div>
     </div>
@@ -25,9 +25,7 @@
 <script>
 export default {
   data() {
-    return {
-      
-    };
+    return {};
   },
   methods: {
     windowEdit(val) {
@@ -40,8 +38,8 @@ export default {
       if (val === "2") {
         console.log("窗口关闭");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -79,7 +77,8 @@ export default {
         padding: 2px;
       }
       span:hover {
-        font-size: 20px;
+        border-radius: 50%;
+        background: #fff;
       }
     }
   }
